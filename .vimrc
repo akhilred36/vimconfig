@@ -1,101 +1,100 @@
-" Don't try to be vi compatible
+" Configuration file for Vi Improved, save as ~/.vimrc to use.
+" Written on 2014-07-16 by Miko Bartnicki <mikobartnicki@gmail.com>.
+
+" use Vim mode instead of pure Vi, it must be the first instruction
 set nocompatible
 
-" Helps force plugins to load correctly when it is turned back on below
-filetype off
-
-" TODO: Load plugins here (pathogen or vundle)
-
-" Turn on syntax highlighting
-syntax on
-
-" For plugins to load correctly
-filetype plugin indent on
-
-" TODO: Pick a leader key
-" let mapleader = ","
-
-" Security
-set modelines=0
-
-" Show line numbers
+" display settings
+set encoding=utf-8 " encoding used for displaying file
+set ruler " show the cursor position all the time
+set showmatch " highlight matching braces
+set showmode " show insert/replace/visual mode
 set number
 
-" Show file stats
-set ruler
+" write settings
+set confirm " confirm :q in case of unsaved changes
+set fileencoding=utf-8 " encoding used when saving file
+set nobackup " do not keep the backup~ file
 
-" Blink cursor on error instead of beeping (grr)
-set visualbell
+" edit settings
+set backspace=indent,eol,start " backspacing over everything in insert mode
+set expandtab " fill tabs with spaces
+set nojoinspaces " no extra space after '.' when joining lines
+set shiftwidth=8 " set indentation depth to 8 columns
+set softtabstop=8 " backspacing over 8 spaces like over tabs
+set tabstop=8 " set tabulator length to 8 columns
+set textwidth=80 " wrap lines automatically at 80th column
 
-" Encoding
-set encoding=utf-8
+" search settings
+set hlsearch " highlight search results
+set ignorecase " do case insensitive search...
+set incsearch " do incremental search
+set smartcase " ...unless capital letters are used
 
-" Whitespace
-set wrap
-set textwidth=79
-set formatoptions=tcqrn1
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
-set expandtab
-set noshiftround
+" file type specific settings
+filetype on " enable file type detection
+filetype plugin on " load the plugins for specific file types
+filetype indent on " automatically indent code
 
-" Cursor motion
-set scrolloff=3
-set backspace=indent,eol,start
-set matchpairs+=<:> " use % to jump between pairs
-runtime! macros/matchit.vim
+" syntax highlighting
+set background=dark " dark background for console
+syntax enable " enable syntax highlighting
 
-" Move up/down editor lines
-nnoremap j gj
-nnoremap k gk
+" characters for displaying non-printable characters
+set listchars=eol:$,tab:>-,trail:.,nbsp:_,extends:+,precedes:+
 
-" Allow hidden buffers
-set hidden
+" tuning for gVim only
+if has('gui_running')
+        set background=light " light background for GUI
+        set columns=84 lines=48 " GUI window geometry
+        set guifont=Monospace\ 12 " font for GUI window
+        set number " show line numbers
+endif
 
-" Rendering
-set ttyfast
+" automatic commands
+if has('autocmd')
+        " file type specific automatic commands
 
-" Status bar
-set laststatus=2
+        " tuning textwidth for Java code
+        autocmd FileType java setlocal textwidth=132
+        if has('gui_running')
+                autocmd FileType java setlocal columns=136
+        endif
 
-" Last line
-set showmode
-set showcmd
+        " don't replace Tabs with spaces when editing makefiles
+        autocmd Filetype makefile setlocal noexpandtab
 
-" Searching
-nnoremap / /\v
-vnoremap / /\v
-set hlsearch
-set incsearch
-set ignorecase
-set smartcase
-set showmatch
-map <leader><space> :let @/=''<cr> " clear search
+        " disable automatic code indentation when editing TeX and XML files
+        autocmd FileType tex,xml setlocal indentexpr=
 
-" Remap help key.
-inoremap <F1> <ESC>:set invfullscreen<CR>a
-nnoremap <F1> :set invfullscreen<CR>
-vnoremap <F1> :set invfullscreen<CR>
+        " clean-up commands that run automatically on write; use with caution
 
-" Textmate holdouts
+        " delete empty or whitespaces-only lines at the end of file
+        autocmd BufWritePre * :%s/\(\s*\n\)\+\%$//ge
 
-" Formatting
-map <leader>q gqip
+        " replace groups of empty or whitespaces-only lines with one empty line
+        autocmd BufWritePre * :%s/\(\s*\n\)\{3,}/\r\r/ge
 
-" Visualize tabs and newlines
-set listchars=tab:▸\ ,eol:¬
-" Uncomment this to enable by default:
-" set list " To enable by default
-" Or use your leader key + l to toggle on/off
-map <leader>l :set list!<CR> " Toggle tabs and EOL
+        " delete any trailing whitespaces
+        autocmd BufWritePre * :%s/\s\+$//ge
+endif
 
-" Color scheme (terminal)
-set t_Co=256
-set background=dark
-"let g:solarized_termcolors=256
-"let g:solarized_termtrans=1
-" put https://raw.github.com/altercation/vim-colors-solarized/master/colors/solarized.vim
-" in ~/.vim/colors/ and uncomment:
-" colorscheme solarized
+" general key mappings
 
+" center view on the search result
+noremap n nzz
+noremap N Nzz
+
+" press F4 to fix indentation in whole file; overwrites marker 'q' position
+noremap <F4> mqggVG=`qzz
+inoremap <F4> <Esc>mqggVG=`qzza
+
+" press F5 to sort selection or paragraph
+vnoremap <F5> :sort i<CR>
+nnoremap <F5> Vip:sort i<CR>
+
+" press F8 to turn the search results highlight off
+noremap <F8> :nohl<CR>
+inoremap <F8> <Esc>:nohl<CR>a
+
+" press F12 to togg
