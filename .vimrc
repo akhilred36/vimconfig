@@ -20,9 +20,9 @@ set nobackup " do not keep the backup~ file
 set backspace=indent,eol,start " backspacing over everything in insert mode
 set expandtab " fill tabs with spaces
 set nojoinspaces " no extra space after '.' when joining lines
-set shiftwidth=8 " set indentation depth to 8 columns
-set softtabstop=8 " backspacing over 8 spaces like over tabs
-set tabstop=8 " set tabulator length to 8 columns
+set shiftwidth=4 " set indentation depth to 8 columns
+set softtabstop=4 " backspacing over 8 spaces like over tabs
+set tabstop=4 " set tabulator length to 8 columns
 set textwidth=80 " wrap lines automatically at 80th column
 
 " search settings
